@@ -198,7 +198,7 @@
       const moodCounts = JSON.parse(localStorage.getItem('moodCounts')) || {};
 
       if (!moodCounts.happy) {
-        storeMoodCounts();  // Initialize if no mood counts exist
+        storeMoodCounts();  
       }
 
       document.getElementById("happyCount").innerText = `Happy: ${moodCounts.happy}`;
@@ -214,8 +214,7 @@
     }
     window.onload = displayMoodCounts;
 
-    // Call the function to display mood counts when the page loads
-    //displayMoodCounts();
+    
   </script>
 
 </body>
