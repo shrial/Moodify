@@ -2,7 +2,7 @@ import requests
 import oracledb
 
 # TMDb API key
-API_KEY = "976ec65025edc3787d818c5230c438a6"
+API_KEY = "enter api key here"
 
 # Genre mapping to TMDb genre IDs
 GENRE_IDS = {
@@ -14,9 +14,9 @@ GENRE_IDS = {
 
 # Oracle DB config
 db_config = {
-    "user": "c##moodify",
-    "password": "moodify",
-    "dsn": "localhost:1522/XE"
+    "user": "user id",
+    "password": "Your password",
+    "dsn": "your localhost"
 }
 
 def fetch_movies_by_genre(genre_name, count=10):
