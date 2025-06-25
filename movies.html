@@ -107,7 +107,7 @@
     .heart-btn:hover img {
       transform: scale(1.2);
     }
-    /* 🌐 Responsive Design */
+  
     @media screen and (max-width: 768px) {
       #navbar {
         flex-direction: column;
@@ -182,7 +182,7 @@
 
   <script>
     const genre = (localStorage.getItem("selectedGenre") || "Drama").toLowerCase();
-    const userId = localStorage.getItem("loggedInUser") || "U001"; // Ensure user is logged in
+    const userId = localStorage.getItem("loggedInUser") || "U001"; 
     const movieContainer = document.getElementById("movieContainer");
   
     let likedMovies = JSON.parse(localStorage.getItem("likedMovies")) || [];
@@ -218,7 +218,7 @@
   
           const heartIcon = card.querySelector(".heart-icon");
   
-          // Toggle like/unlike when heart is clicked
+         
           card.querySelector(".heart-btn").addEventListener("click", () => {
             likedMovies = JSON.parse(localStorage.getItem("likedMovies")) || [];
   
@@ -234,11 +234,11 @@
             );
   
             if (index > -1) {
-              // Unlike
+              
               likedMovies.splice(index, 1);
               heartIcon.src = "./blackheart.jpg";
   
-              // Send the movie unhearted to the backend
+              
               fetch('/unheartMovie', {
                 method: 'POST',
                 headers: {
@@ -258,11 +258,11 @@
               });
   
             } else {
-              // Like
+        
               likedMovies.push(movieObj);
               heartIcon.src = "./redheart.jpg";
   
-              // Send the movie like data to the backend
+             
               fetch('/likeMovie', {
                 method: 'POST',
                 headers: {
@@ -290,7 +290,7 @@
           movieContainer.appendChild(card);
         });
   
-        // 🔁 Check if any movie was unhearted from likedmovies.html
+        
         const unheartedMovie = localStorage.getItem("movieUnhearted");
         if (unheartedMovie) {
           const heartIcons = document.querySelectorAll(".movie-card");
@@ -303,7 +303,7 @@
             }
           });
   
-          localStorage.removeItem("movieUnhearted"); // Clear the flag
+          localStorage.removeItem("movieUnhearted"); 
         }
   
       } catch (err) {
