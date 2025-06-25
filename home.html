@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodify</title>
+    <style>
+       body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #CBAE82; 
+        }
+        
+        #navbar {
+            position: fixed;
+            height: 10vh;
+            width: 100vw;
+            background-color: rgb(161, 0, 79, 0.75);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 100px; /* Increased gap */
+        }
+        
+        #moodify {
+            position: fixed;
+            left: 40px;
+            top: 23px;
+            color: #D4B078;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        #navbar a {
+            top: 23px;
+            color: #D4B078;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        #logout {
+            position: fixed;
+            left: 90vw;
+            margin-right: 40px;
+        }
+
+        #navbar a:hover {
+            top: 23px;
+            color: #D4B078;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+
+        .home-pic {
+            margin: 0;
+            width: 80vw;
+        }
+
+        @media (min-width: 601px) and (max-width: 1024px) {
+            #navbar {
+                gap: 1200px;
+            }
+
+            .home-pic img {
+                width: 70vw;
+                height: auto;
+                margin-top: 10vh;
+            }
+
+            .home-title {
+                top: 30vh;
+                left: 55vw;
+                font-size: 2em;
+            }
+
+            .home-subtitle {
+                top: 38vh;
+                left: 55vw;
+                font-size: 1.2em;
+                width: 35vw;
+            }
+
+            .home-headings,
+            .choose-radio,
+            .song-rec,
+            .movie-rec,
+            #likedSongs,
+            #likedMovies,
+            #moodReport {
+                margin-left: 20vw;
+            }
+
+            .dropdown {
+                width: 200px;
+            }
+
+            .home-button {
+                width: 250px;
+            }
+        }
+        
+        .home-pic img {
+            margin-top: 10vh;
+            width: 60vw;
+            height: 90vh;
+            opacity: 0.95;
+            mask-image: linear-gradient(to right, transparent, 0, black 50%, transparent);
+        }
+        
+        .home-title {
+            position: absolute;
+            top: 35vh;
+            left: 60vw;
+            font-size: 2.5em;
+            color: #5A002E;
+        }
+
+        .home-subtitle {
+            position: absolute;
+            top: 44vh;
+            left: 60vw;
+            width: 30vw;
+            font-size: 1.5em;
+            color: #5A002E;
+        }
+        
+        .home-headings {
+            color: #5A002E;
+            font-size: 2.4em;
+            margin-top: 60px;
+            margin-left: 35vw;
+        }
+        
+        .choose-radio {
+            margin-left: 35vw;
+            margin-bottom: 20px;
+        }
+        
+        .movie-rec .home-headings {
+            margin-top: 40px;
+        }
+        
+        .dropdown {
+            display: block;
+            margin-left: 40vw;
+            margin-top: 30px;
+            height: 40px;
+            width: 150px;
+            border-radius: 10px;
+            text-align: center;
+            background-color: rgb(90, 0, 46, 0.9);
+            color: #CBAE82;
+            font-weight: 700;
+        }
+
+        label {
+            margin: 20px;
+            cursor: pointer;
+            font-size: 1.6em;
+            color: #5A002E; 
+        }
+
+        .home-button {
+            background-color: rgb(90, 0, 46, 0.75);
+            width: 180px;
+            height: 45px;
+            color: #D4B078; 
+            font-size: 1.2em;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .home-button:hover {
+            background-color: #D4B078;
+            width: 180px;
+            height: 45px;
+            color: rgb(90, 0, 46); 
+            font-size: 1.2em;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        #likedSongs {
+            margin-left: 32vw;
+        }
+
+        #GetSong {
+            margin-left: 35vw;
+            width: 300px;
+            height: 70px;
+            margin-top: 30px;
+        }
+
+        #likedMovies {
+            margin-left: 7vw;
+        }
+
+        #GetMovie {
+            margin-left: 35vw;
+            width: 300px;
+            height: 70px;
+            margin-top: 30px;
+        }
+
+        #moodReport {
+            margin-left: 41.5vw;
+        }
+
+        .footer {
+            height: 10vh;
+        }
+        .home-title {
+    margin-bottom: 80px;  /* Adds space below the title */
+}
+
+.home-subtitle {
+    margin-top: 80px;  /* Adds space above the subtitle */
+}
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <a id="moodify" href="./home.html">Moodify</a>
+        <a href="./likedsongs.html">Liked Songs</a>
+        <a href="./likedmovies.html">Liked Movies</a>
+        <a href="./moodreport.html">Mood Report</a>
+        <a id="logout" href="#">Log Out</a>
+
+    </nav>
+    <div class="home-pic">
+        <img src="./home4.jpg" alt="violin">
+    </div>
+    <h1 class="home-title">Welcome to Moodify</h1>
+    <p class="home-subtitle">Get song and movie recommendations based on your mood...</p>
+    <p class="home-headings" >What are you in the Mood for?</p>
+    <div class="choose-radio">
+        <label>
+            <input type="radio" name="choice" value="songs" id="songs">
+            Songs
+        </label>
+        <label>
+            <input type="radio" name="choice" value="movies" id="movies">
+            Movies
+        </label>
+    </div>
+    <div class="song-rec">
+        <label for="type" class="home-headings">Choose your mood</label>
+<select id="mood-dropdown" name="type" class="dropdown">
+  <option value="">-- Select Mood --</option>
+  <option value="happy">Happy</option>
+  <option value="sad">Sad</option>
+  <option value="motivated">Motivated</option>
+  <option value="calm">Calm</option>
+</select>
+<button class="home-button" id="GetSong">Get Song Recommendation </button>
+    </div>
+    <div class="movie-rec">
+        <p class="home-headings">Choose a genre</p>
+        <select id="genre-dropdown" name="type" class="dropdown">
+            <option value="">-- Select Genre --</option>
+            <option value="Romance">Rom-Com</option>
+            <option value="Thriller">Thriller</option>
+            <option value="Drama">Drama</option>
+            <option value="Sci-Fi">Sci-fi</option>
+          </select>
+          <button class="home-button" id="GetMovie">Get Movie Recommendation </button>
+    </div>
+    <p class="home-headings">Explore your Favorites</p>
+    <button class="home-button" id="likedSongs">Liked Songs</button>
+    <button class="home-button" id="likedMovies" >Liked Movies</button>
+    <p class="home-headings">Get your yearly Mood report</p>
+    <button class="home-button" id="moodReport">Get Mood Report</button>
+    <div class="footer">
+
+    </div>
+</body>
+</html>
+ <script>
+    const songRadio = document.getElementById('songs');
+    const movieRadio = document.getElementById('movies');
+    const songRec = document.querySelector('.song-rec');
+    const movieRec = document.querySelector('.movie-rec');
+
+    function toggleRecommendationOptions() {
+        if (songRadio.checked) {
+            songRec.style.display = 'block';
+            movieRec.style.display = 'none';
+        } else if (movieRadio.checked) {
+            songRec.style.display = 'none';
+            movieRec.style.display = 'block';
+        } else {
+            songRec.style.display = 'none';
+            movieRec.style.display = 'none';
+        }
+    }
+    
+
+    // Initial state
+    toggleRecommendationOptions();
+
+    // Event listeners
+    songRadio.addEventListener('change', toggleRecommendationOptions);
+    movieRadio.addEventListener('change', toggleRecommendationOptions);
+
+    
+    document.getElementById('GetSong').onclick = function () {
+    const mood = document.getElementById('mood-dropdown').value;
+    if (!mood) {
+        alert("Please select a mood.");
+        return;
+    }
+
+    const userId = localStorage.getItem("loggedInUser");
+
+    // 🟢 Increment the mood count in localStorage
+    
+
+function likeSong(song) {
+  const likedSongs = JSON.parse(localStorage.getItem("likedSongs")) || [];
+
+  // Prevent duplicates (by checking song_name + user_id)
+  const isAlreadyLiked = likedSongs.some(s => s.song_name === song.song_name && s.user_id === song.user_id);
+
+  if (!isAlreadyLiked) {
+    likedSongs.push(song);
+    localStorage.setItem("likedSongs", JSON.stringify(likedSongs));
+  }
+}   
+
+function likeThisSong(song_name, artist_name, year, mood) {
+    const userId = localStorage.getItem("loggedInUser") || "U001";
+
+    const song = {
+        user_id: userId,
+        song_name,
+        artist_name,
+        year,
+        mood
+    };
+
+    likeSong(song);
+    alert(`Liked: ${song_name}`);
+}
+
+document.getElementById('GetMovie').onclick = function () {
+    const genre = document.getElementById('genre-dropdown').value;
+    if (!genre) {
+        alert("Please select a Genre.");
+        return;
+    }
+    console.log("Genre received on server:", genre);
+    localStorage.setItem("selectedGenre", genre); 
+    window.location.href = "./movies.html"; 
+};
+
+function handleMoodSelection(mood) {
+  const userId = 123; // Replace with dynamic user_id
+  
+  // Update mood count on the server
+  fetch('/updateMoodCount', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId, mood })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log("Mood count updated:", data);
+    fetchRandomQuote(); // if needed
+  })
+  .catch(err => console.error("Error updating mood count:", err));
+}
+
+const moodCounts = JSON.parse(localStorage.getItem('moodCounts')) || {
+        happy: 0,
+        sad: 0,
+        motivated: 0,
+        calm: 0
+    };
+
+    
+        moodCounts[mood]++;
+        localStorage.setItem('moodCounts', JSON.stringify(moodCounts));
+    
+
+    // 🔄 (Optional) Send to server too
+    handleMoodSelection(userId, mood);
+
+    // 🚀 Redirect
+    window.location.href = `song.html?mood=${mood}`;
+};
+
+    document.getElementById('likedMovies').onclick = function() {
+        window.location.href = "./likedmovies.html";
+    };
+
+    document.getElementById('likedSongs').onclick = function() {
+        window.location.href = "./likedsongs.html";
+    };
+
+    document.getElementById('moodReport').onclick = function() {
+        window.location.href = "./moodreport.html";
+    };
+    document.getElementById("logout").addEventListener("click", function(e) {
+    e.preventDefault();
+    localStorage.removeItem("loggedInUser");
+    alert("Logged out successfully!");
+    window.location.href = "login.html";
+});
+
+</script>

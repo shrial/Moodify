@@ -1,0 +1,50 @@
+CREATE TABLE User (
+    user_id INT PRIMARY KEY,
+    email VARCHAR(300) UNIQUE NOT NULL,
+    password VARCHAR(300) NOT NULL,
+    username VARCHAR(100) UNIQUE NOT NULL
+);
+
+CREATE TABLE Songs (
+    song_name VARCHAR(300),
+    artist_name VARCHAR(300),
+    mood VARCHAR(100),
+    PRIMARY KEY (song_name, artist_name)
+);
+
+CREATE TABLE Movies (
+    movie_name VARCHAR(300),
+    year_of_release INT,
+    genre VARCHAR(100),
+    PRIMARY KEY (movie_name, year_of_release)
+);
+
+
+CREATE TABLE LikedSongs (
+    user_id INT,
+    song_name VARCHAR(300),
+    artist_name VARCHAR(300),
+    mood VARCHAR(100),
+    PRIMARY KEY (user_id, song_name, artist_name),
+    FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (song_name, artist_name) REFERENCES Songs(song_name, artist_name) ON DELETE CASCADE
+);
+
+CREATE TABLE LikedMovies (
+    user_id INT,
+    movie_name VARCHAR(300),
+    year_of_release INT,
+    genre VARCHAR(100),
+    PRIMARY KEY (user_id, movie_name, year_of_release),
+    FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (movie_name, year_of_release) REFERENCES Movies(movie_name, year_of_release) ON DELETE CASCADE
+);
+
+
+CREATE OR REPLACE TRIGGER trg_users_user_id
+BEFORE INSERT ON users
+FOR EACH ROW
+BEGIN
+  :NEW.user_id := user_id_seq.NEXTVAL;
+END;
+/

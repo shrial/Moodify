@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movies - Moodify</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #D4B078;
+      margin: 0;
+      padding: 0px;
+    }
+
+    #navbar{
+      top:0;
+      position: fixed;
+      height: 10vh;
+      width: 100vw;
+      background-color: rgb(161, 0, 79,0.75);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 70px;
+    }
+
+    #moodify{
+      position: fixed;
+      left: 40px;
+      top: 23px;
+      color: #D4B078;
+      text-decoration: none;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    #navbar a{
+      top: 23px;
+      color: #D4B078;
+      text-decoration: none;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    #logout {
+      position:fixed;
+      left: 90vw;
+      margin-right: 40px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #5A002E;
+      margin-top:13vh;
+    }
+
+    .movie-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .movie-card {
+      background-color: rgba(161, 0, 79, 0.85);
+      border-radius: 20px;
+      padding: 20px;
+      width: 250px;
+      text-align: center;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+    
+    .movie-card img {
+      width: 80px;
+      border-radius: 12px;
+      height: 30px;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+
+    .movie-card h3 {
+      font-size: 1em;
+      color: #5A002E;
+      padding: 10px;
+    }
+    
+    .movie-title {
+      font-size: 18px;
+      color: #E8DCCF;
+      font-weight: bold;
+    }
+    .heart-btn {
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .heart-btn img {
+      width: 40px;
+      border-radius: 0px;
+      height: 40px;
+      transition: transform 0.2s ease;
+    }
+
+    .heart-btn:hover img {
+      transform: scale(1.2);
+    }
+    /* 🌐 Responsive Design */
+    @media screen and (max-width: 768px) {
+      #navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 15px 0;
+        gap: 15px;
+      }
+
+      #moodify {
+        position: static;
+        margin-bottom: 10px;
+      }
+
+      #logout {
+        position: static;
+        margin: 0;
+      }
+
+      h1 {
+        font-size: 1.6em;
+        margin-top: 15vh;
+      }
+
+      .movie-card {
+        width: 80vw;
+      }
+
+      .movie-card h3 {
+        font-size: 1em;
+      }
+
+      .heart-btn img {
+        width: 35px;
+        height: 35px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      #navbar {
+        gap: 10px;
+      }
+
+      .movie-card {
+        width: 90vw;
+        padding: 15px;
+      }
+
+      .movie-title {
+        font-size: 16px;
+      }
+
+      .heart-btn img {
+        width: 30px;
+        height: 30px;
+      }
+
+      h1 {
+        font-size: 1.4em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="navbar">
+    <a id="moodify" href="./home.html">Moodify</a>
+    <a href="./likedsongs.html">Liked Songs</a>
+    <a href="./likedmovies.html">Liked Movies</a>
+    <a id="logout" href="#">Log Out</a>
+  </nav>
+  <h1>Recommended Movies</h1>
+  <div class="movie-container" id="movieContainer"></div>
+
+  <script>
+    const genre = (localStorage.getItem("selectedGenre") || "Drama").toLowerCase();
+    const userId = localStorage.getItem("loggedInUser") || "U001"; // Ensure user is logged in
+    const movieContainer = document.getElementById("movieContainer");
+  
+    let likedMovies = JSON.parse(localStorage.getItem("likedMovies")) || [];
+  
+    async function fetchMoviesFromDB() {
+      try {
+        const response = await fetch(`/getMovies?genre=${genre}`);
+        const movies = await response.json();
+  
+        if (movies.length === 0) {
+          movieContainer.innerHTML = "<p>No movies found.</p>";
+          return;
+        }
+  
+        movies.forEach(movie => {
+          const isLiked = likedMovies.some(
+            m => m.movie_name === movie.movie_name && m.user_id === userId
+          );
+  
+          const card = document.createElement("div");
+          card.className = "movie-card";
+  
+          card.innerHTML = `
+            <h3 class ="movie-title">${movie.movie_name} (${movie.year_of_release})</h3>
+            <div class="heart-btn">
+              <img 
+                src="${isLiked ? './redheart.jpg' : './blackheart.jpg'}" 
+                alt="Like" 
+                class="heart-icon"
+              />
+            </div>
+          `;
+  
+          const heartIcon = card.querySelector(".heart-icon");
+  
+          // Toggle like/unlike when heart is clicked
+          card.querySelector(".heart-btn").addEventListener("click", () => {
+            likedMovies = JSON.parse(localStorage.getItem("likedMovies")) || [];
+  
+            const movieObj = {
+              user_id: userId,
+              movie_name: movie.movie_name,
+              year_of_release: movie.year_of_release,
+              genre: movie.genre
+            };
+  
+            const index = likedMovies.findIndex(
+              m => m.movie_name === movieObj.movie_name && m.user_id === userId
+            );
+  
+            if (index > -1) {
+              // Unlike
+              likedMovies.splice(index, 1);
+              heartIcon.src = "./blackheart.jpg";
+  
+              // Send the movie unhearted to the backend
+              fetch('/unheartMovie', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  user_id: userId,
+                  movie_name: movieObj.movie_name
+                })
+              })
+              .then(response => response.json())
+              .then(data => {
+                console.log('Movie unhearted:', data);
+              })
+              .catch(error => {
+                console.error('Error unhearting movie:', error);
+              });
+  
+            } else {
+              // Like
+              likedMovies.push(movieObj);
+              heartIcon.src = "./redheart.jpg";
+  
+              // Send the movie like data to the backend
+              fetch('/likeMovie', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  user_id: userId,
+                  movie_name: movie.movie_name,
+                  year_of_release: movie.year_of_release,
+                  genre: movie.genre
+                })
+              })
+              .then(response => response.json())
+              .then(data => {
+                console.log('Movie liked:', data);
+              })
+              .catch(error => {
+                console.error('Error liking movie:', error);
+              });
+            }
+  
+            localStorage.setItem("likedMovies", JSON.stringify(likedMovies));
+          });
+  
+          movieContainer.appendChild(card);
+        });
+  
+        // 🔁 Check if any movie was unhearted from likedmovies.html
+        const unheartedMovie = localStorage.getItem("movieUnhearted");
+        if (unheartedMovie) {
+          const heartIcons = document.querySelectorAll(".movie-card");
+  
+          heartIcons.forEach(card => {
+            const title = card.querySelector("h3").innerText;
+            if (title.toLowerCase().startsWith(unheartedMovie.toLowerCase())) {
+              const icon = card.querySelector(".heart-icon");
+              icon.src = "./blackheart.jpg";
+            }
+          });
+  
+          localStorage.removeItem("movieUnhearted"); // Clear the flag
+        }
+  
+      } catch (err) {
+        console.error("Error fetching movies:", err);
+        movieContainer.innerHTML = "<p>Error fetching movie data.</p>";
+      }
+    }
+  
+    fetchMoviesFromDB();
+  </script>
+  
+</body>
+</html>

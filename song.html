@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Moodify - Songs</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #D4B078;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #E8DCCF;
+    }
+    #navbar {
+      top: 0;
+      position: fixed;
+      height: 10vh;
+      width: 100vw;
+      background-color: rgba(161, 0, 79, 0.75);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 70px;
+    }
+    #moodify {
+      position: fixed;
+      left: 40px;
+      top: 23px;
+      color: #D4B078;
+      text-decoration: none;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    #navbar a {
+      top: 23px;
+      color: #D4B078;
+      text-decoration: none;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    #logout {
+      position: fixed;
+      left: 90vw;
+      margin-right: 40px;
+    }
+    header {
+      background-color: rgba(90, 0, 46, 0.9);
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 10vh;
+      color: #D4B078;
+      border-bottom: 2px solid #CBAE82;
+    }
+    header a {
+      color: #CBAE82;
+      font-size: 14px;
+      text-decoration: underline;
+    }
+    .song-list {
+      padding: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+    .song-card {
+      background-color: rgba(161, 0, 79, 0.85);
+      border-radius: 20px;
+      padding: 20px;
+      width: 250px;
+      text-align: center;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+    .song-card:hover {
+      transform: translateY(-5px);
+    }
+    .song-card img.song-pic {
+      width: 100%;
+      border-radius: 12px;
+      height: 160px;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+    .song-title {
+      font-size: 18px;
+      color: #E8DCCF;
+      font-weight: bold;
+    }
+    .artist {
+      font-size: 14px;
+      color: #CBAE82;
+      margin: 4px 0;
+    }
+    .mood {
+      font-size: 14px;
+      margin: 5px 0;
+    }
+    .song-card a {
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+    .heart-btn {
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .heart-btn img {
+      width: 32px;
+      transition: transform 0.2s ease;
+    }
+    .heart-btn:hover img {
+      transform: scale(1.2);
+    }
+    @media (max-width: 992px) {
+      #navbar {
+        gap: 30px;
+      }
+      .song-card {
+        width: 200px;
+      }
+      header {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        height: auto;
+      }
+      .song-card {
+        width: 180px;
+      }
+      header {
+        font-size: 18px;
+      }
+      .song-title {
+        font-size: 16px;
+      }
+      .artist {
+        font-size: 12px;
+      }
+      .mood {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #navbar {
+        gap: 15px;
+      }
+      .song-card {
+        width: 160px;
+        padding: 15px;
+      }
+      header {
+        font-size: 16px;
+      }
+      .song-title {
+        font-size: 14px;
+      }
+      .artist {
+        font-size: 10px;
+      }
+      .mood {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="navbar">
+    <a id="moodify" href="./home.html">Moodify</a>
+    <a href="./likedsongs.html">Liked Songs</a>
+    <a href="./likedmovies.html">Liked Movies</a>
+    
+    <a id="logout" href="#">Log Out</a>
+  </nav>
+
+  <header id="header">
+    🎧<br>
+    <a href="likedsongs.html">View Liked Songs</a>
+  </header>
+
+  <section class="song-list" id="songList">
+    <!-- Songs are dynamically added -->
+  </section>
+
+  <script>
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    const mood = getQueryParam("mood") || "happy";
+    const userId = localStorage.getItem("loggedInUser") || "U001";
+    const songList = document.getElementById("songList");
+    const likedSongs = JSON.parse(localStorage.getItem("likedSongs")) || [];
+
+    // 💡 Random quote with per-mood uniqueness
+    function fetchRandomQuote() {
+  fetch(`/getRandomQuote?mood=${mood}&_=${Date.now()}`)
+    .then(res => res.json())
+    .then(quote => {
+      const lastQuoteKey = `lastQuote_${mood}`;  // Corrected the template literal here
+      const lastQuote = sessionStorage.getItem(lastQuoteKey);
+
+      if (lastQuote !== quote.quote) {
+        sessionStorage.setItem(lastQuoteKey, quote.quote);
+      }
+
+      document.getElementById("header").innerHTML = `
+        "${quote.quote}" 🎧<br>
+        <a href="likedsongs.html">View Liked Songs</a>
+      `;
+    })
+    .catch(error => {
+      console.error("Error fetching quote:", error);
+      document.getElementById("header").innerHTML = `
+        Moodify 🎧<br>
+        <a href="likedsongs.html">View Liked Songs</a>
+      `;
+    });
+}
+
+    fetchRandomQuote();
+
+    // ✅ Fetch songs by mood
+    fetch(`/getSongs?mood=${mood}`)
+      .then(res => res.json())
+      .then(songs => {
+        songs.forEach(song => {
+          const isLiked = likedSongs.some(s =>
+            s.song_name === song.song_name && s.user_id === userId
+          );
+
+          const card = document.createElement("div");
+          card.className = "song-card";
+
+          card.innerHTML = `
+  <div class="song-title">${song.song_name}</div>
+  <div class="artist">by ${song.artist_name}</div>
+  <div class="mood">Mood: ${song.mood}</div>
+  <div class="song-link">
+    ${song.spotify_url ? `
+      <a href="${song.spotify_url}" target="_blank" style="color: #CBAE82; text-decoration: underline; font-size: 14px;">
+  Listen on Spotify 🎵
+</a>
+
+    ` : `<span style="font-size: 14px; color: #999;">Spotify link unavailable</span>`}
+  </div>
+  <div class="heart-btn">
+    <img 
+      src="${isLiked ? 'redheart.jpg' : 'blackheart.jpg'}" 
+      alt="Like" 
+      class="heart-icon"
+    >
+  </div>
+`;
+
+
+
+
+          const heartIcon = card.querySelector(".heart-icon");
+
+          card.querySelector(".heart-btn").addEventListener("click", () => {
+            let currentLiked = JSON.parse(localStorage.getItem("likedSongs")) || [];
+
+            const songObj = {
+              user_id: userId,
+              song_name: song.song_name,
+              artist_name: song.artist_name,
+              year: song.year || "Unknown",
+              mood: song.mood
+            };
+
+            const index = currentLiked.findIndex(
+              s => s.song_name === songObj.song_name && s.user_id === userId
+            );
+
+            if (index > -1) {
+              // Unlike
+              currentLiked.splice(index, 1);
+              heartIcon.src = "blackheart.jpg";
+            } else {
+              // Like
+              currentLiked.push(songObj);
+              heartIcon.src = "redheart.jpg";
+            }
+
+            localStorage.setItem("likedSongs", JSON.stringify(currentLiked));
+          });
+
+          songList.appendChild(card);
+        });
+      })
+      .catch(error => {
+        console.error("Error fetching songs:", error);
+        songList.innerHTML = "<p>Failed to load songs. Please try again later.</p>";
+      });
+  </script>
+</body>
+</html>
