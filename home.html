@@ -214,11 +214,11 @@
             height: 10vh;
         }
         .home-title {
-    margin-bottom: 80px;  /* Adds space below the title */
+    margin-bottom: 80px;  
 }
 
 .home-subtitle {
-    margin-top: 80px;  /* Adds space above the subtitle */
+    margin-top: 80px; 
 }
     </style>
 </head>
@@ -316,7 +316,7 @@
 
     const userId = localStorage.getItem("loggedInUser");
 
-    // 🟢 Increment the mood count in localStorage
+    //  Increment the mood count in localStorage
     
 
 function likeSong(song) {
@@ -358,7 +358,7 @@ document.getElementById('GetMovie').onclick = function () {
 };
 
 function handleMoodSelection(mood) {
-  const userId = 123; // Replace with dynamic user_id
+  const userId = 123; 
   
   // Update mood count on the server
   fetch('/updateMoodCount', {
@@ -386,10 +386,10 @@ const moodCounts = JSON.parse(localStorage.getItem('moodCounts')) || {
         localStorage.setItem('moodCounts', JSON.stringify(moodCounts));
     
 
-    // 🔄 (Optional) Send to server too
+   
     handleMoodSelection(userId, mood);
 
-    // 🚀 Redirect
+    
     window.location.href = `song.html?mood=${mood}`;
 };
 
