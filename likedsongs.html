@@ -208,7 +208,7 @@
         </tr>
       </thead>
       <tbody id="likedSongsList">
-        <!-- Dynamically filled by JavaScript -->
+        
       </tbody>
     </table>
   </div>
@@ -254,18 +254,18 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                user_id: song.user_id, // Ensure you are passing user_id, song_name, and artist_name
+                user_id: song.user_id, 
                 song_name: song.song_name,
                 artist_name: song.artist_name
             })
         });
 
-        const data = await response.text(); // Or response.json() if your server returns a JSON response
+        const data = await response.text(); 
         if (response.ok) {
-            console.log(data); // Successfully removed the song
+            console.log(data); 
             alert("Song removed from liked songs!");
-            // Optionally, remove the song from the UI after deletion
-            removeSongFromUI(song.song_name);  // Assuming a function that removes it from the UI
+            
+            removeSongFromUI(song.song_name);  
         } else {
             alert("Failed to remove song: " + data);
         }
@@ -276,7 +276,7 @@
 }
 
 function removeSongFromUI(song_name) {
-    // Implement this function to remove the song from the UI list
+ 
     const songElement = document.getElementById(song_name);
     if (songElement) {
         songElement.remove();
@@ -324,7 +324,7 @@ function removeSongFromUI(song_name) {
 
     window.onload = () => {
       loadLikedSongs();
-      saveToDatabase(); // Optionally save the liked songs to the database when the page loads
+      saveToDatabase(); 
     };
   </script>
 </body>
