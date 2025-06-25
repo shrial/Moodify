@@ -4,12 +4,12 @@ import time
 import oracledb
 
 # ==== CONFIG ====
-client_id = "34819ee942a34b778235f910ad89628e"
-client_secret = "fcc733dc551a42389fa4a42388345175"
+client_id = "your client id"
+client_secret = "your client secret code"
 
-username = "c##moodify"
-password = "moodify"
-dsn = "localhost:1522/XE"
+username = "user id"
+password = "Your password"
+dsn = "your localhost"
 
 moods = ["happy", "sad", "motivated", "calm"]
 limit_per_mood = 10
