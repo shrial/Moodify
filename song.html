@@ -193,7 +193,7 @@
   </header>
 
   <section class="song-list" id="songList">
-    <!-- Songs are dynamically added -->
+  
   </section>
 
   <script>
@@ -207,12 +207,12 @@
     const songList = document.getElementById("songList");
     const likedSongs = JSON.parse(localStorage.getItem("likedSongs")) || [];
 
-    // 💡 Random quote with per-mood uniqueness
+    //  Random quote with per-mood uniqueness
     function fetchRandomQuote() {
   fetch(`/getRandomQuote?mood=${mood}&_=${Date.now()}`)
     .then(res => res.json())
     .then(quote => {
-      const lastQuoteKey = `lastQuote_${mood}`;  // Corrected the template literal here
+      const lastQuoteKey = `lastQuote_${mood}`;  
       const lastQuote = sessionStorage.getItem(lastQuoteKey);
 
       if (lastQuote !== quote.quote) {
@@ -235,7 +235,7 @@
 
     fetchRandomQuote();
 
-    // ✅ Fetch songs by mood
+    //  Fetch songs by mood
     fetch(`/getSongs?mood=${mood}`)
       .then(res => res.json())
       .then(songs => {
