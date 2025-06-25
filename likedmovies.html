@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Liked Movies - Moodify</title>
   <style>
-    /* Your existing styles here */
+    
     body {
       background-size: cover;
       background-position: center;
@@ -122,9 +122,9 @@
     h1 {
   margin-top: 90px;
   margin-bottom: 20px;
-  color: #D4B078; /* Same color as the title of "Liked Songs" */
-  font-size: 2em;  /* Adjust font size as needed */
-  font-weight: bold; /* Bold the text */
+  color: #D4B078; 
+  font-size: 2em;  
+  font-weight: bold; 
 }
 
 
@@ -142,7 +142,7 @@
         filter: drop-shadow(0 0 5px #ff4f8b);
       }
     }
-    /* Media Queries for responsiveness */
+  
     @media (max-width: 768px) {
       #navbar {
         flex-direction: column;
@@ -227,7 +227,7 @@
         </tr>
       </thead>
       <tbody id="movieList">
-        <!-- Liked movies will be dynamically inserted here -->
+        
       </tbody>
     </table>
   </div>
@@ -266,7 +266,7 @@
 }
 // Function to render liked movies
 function renderLikedMovies() {
-      movieList.innerHTML = ""; // clear current table
+      movieList.innerHTML = ""; 
   
       likedMovies.forEach((movie) => {
         if (movie.user_id === userId) {
@@ -282,9 +282,9 @@ function renderLikedMovies() {
   
           const heartIcon = row.querySelector(".heart-icon");
   
-          // Add click event to "unheart"
+         
           heartIcon.addEventListener("click", () => {
-            // Remove movie from likedMovies
+            
             likedMovies = likedMovies.filter(
               m =>
                 !(
