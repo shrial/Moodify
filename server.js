@@ -4,15 +4,16 @@ const oracledb = require("oracledb");
 const path = require("path");
 const cors = require('cors');
 const app = express();
-app.use(cors()); // Allow all domains, you can restrict it to specific domains
+app.use(cors()); // Allow all domains
 app.use(express.json()); 
-//const oracledb = require("oracledb");
+
 
 // Define Oracle DB connection configuration
 const dbConfig = {
-  user: "c##moodify",
-  password: "moodify",
-connectString: "localhost:1522/XE" // or replace with your actual connect string
+  user: "user id",
+  password: "Your password",
+connectString: "your localhost"
+ 
 };
 const PORT = 3000;
 
@@ -31,9 +32,9 @@ app.get("/signup", (req, res) => {
 // Oracle DB Connection
 async function connectDB() {
     return await oracledb.getConnection({
-        user: "C##MOODIFY",
-        password: "moodify",
-        connectString: "localhost:1522/XE"
+        user: "user id",
+        password: "Your password",
+        connectString: "your localhost"
     });
 }
 
@@ -138,13 +139,13 @@ app.get("/getMovies", async (req, res) => {
 app.post("/likeMovie", async (req, res) => {
     let { username, movie_name, year_of_release, genre } = req.body;
 
-    // Debug log
+    
     console.log("Trying to insert:", req.body);
 
-    // Convert year_of_release to number
+   
     year_of_release = Number(year_of_release);
 
-    // Guard against bad inputs
+    
     if (!username || !movie_name || isNaN(year_of_release) || !genre) {
         return res.status(400).json({ message: "Invalid input. Please provide username, movie_name, year_of_release (number), and genre." });
     }
@@ -152,7 +153,7 @@ app.post("/likeMovie", async (req, res) => {
     try {
         const connection = await connectDB();
 
-        // Debug log to see the query being executed
+      
         const insertMovieQuery = `
             INSERT INTO movies (movie_name, year_of_release, genre)
             VALUES (:movie_name, :year_of_release, :genre)
@@ -183,7 +184,7 @@ app.post("/likeMovie", async (req, res) => {
 
         await connection.close();
 
-        // Check if rows were affected (movie inserted)
+     
         if (result.rowsAffected === 1) {
             res.status(200).json({ message: "Movie added to liked list!" });
         } else {
@@ -288,13 +289,13 @@ app.post("/saveLikedMovies", async (req, res) => {
 app.post("/likeSong", async (req, res) => {
     let { username, song_name, artist_name, genre, year_of_release } = req.body;
 
-    // Debug log
+    
     console.log("Trying to insert:", req.body);
 
-    // Convert year_of_release to number
+  
     year_of_release = Number(year_of_release);
 
-    // Guard against bad inputs
+   
     if (!username || !song_name || !artist_name || isNaN(year_of_release) || !genre) {
         return res.status(400).json({ message: "Invalid input. Please provide username, song_name, artist_name, year_of_release (number), and genre." });
     }
@@ -302,7 +303,7 @@ app.post("/likeSong", async (req, res) => {
     try {
         const connection = await connectDB();
 
-        // Debug log to see the query being executed
+        
         const insertSongQuery = `
             INSERT INTO songs (song_name, artist_name, year_of_release, genre)
             VALUES (:song_name, :artist_name, :year_of_release, :genre)
@@ -318,7 +319,7 @@ app.post("/likeSong", async (req, res) => {
             genre
         }, { autoCommit: true });
 
-        // Now, insert into likedsongs table
+        //  insert into likedsongs table
         const insertLikedSongQuery = `
             INSERT INTO likedsongs (username, song_name, artist_name, year_of_release, genre)
             VALUES (:username, :song_name, :artist_name, :year_of_release, :genre)
@@ -350,7 +351,6 @@ app.post("/likeSong", async (req, res) => {
 
 
 // ADD LIKED SONG
-// ADD LIKED SONG
 app.post('/addLikedSong', async (req, res) => {
     const { user_id, song_name, artist_name, mood } = req.body;
 
@@ -379,7 +379,7 @@ app.post('/addLikedSong', async (req, res) => {
         console.error("Error adding liked song:", err);
         res.status(500).send("Error adding liked song.");
     }
-    console.log(req.body);  // Add this in the '/addLikedSong' endpoint
+    console.log(req.body);  
 
 });
 
@@ -388,7 +388,7 @@ app.post('/removeLikedSong', async (req, res) => {
     const { user_id, song_name, artist_name } = req.body;
 
     try {
-        const connection = await oracledb.getConnection(dbConfig); // Using the dbConfig as per your setup
+        const connection = await oracledb.getConnection(dbConfig);
         await connection.execute(
             `DELETE FROM likedsongs 
              WHERE username = :user_id 
@@ -425,7 +425,7 @@ app.get("/getSongs", async (req, res) => {
             song_name: row[0],
             artist_name: row[1],
             mood: row[2],
-            spotify_url: row[3] || ""  // Make sure to handle if there's no URL
+            spotify_url: row[3] || "" 
         }));
 
         res.json(songs);
@@ -436,7 +436,7 @@ app.get("/getSongs", async (req, res) => {
     }
 });
 app.post("/saveLikedSongs", async (req, res) => {
-    const songs = req.body; // Array of liked song objects
+    const songs = req.body; 
 
     try {
         const connection = await oracledb.getConnection(dbConfig);
@@ -494,7 +494,7 @@ app.get('/getRandomQuote', async (req, res) => {
 });
   
 // ADD LIKED SONG
-// Endpoint to handle liking a song and updating mood counts
+
 app.post('/likeSong', async (req, res) => {
     const { username, songId, mood } = req.body;
   
@@ -504,7 +504,7 @@ app.post('/likeSong', async (req, res) => {
     }
   
     try {
-      // Find the user in the database (assuming you have a User collection)
+      // Find the user in the database 
       const user = await User.findOne({ username: username });
       
       if (!user) {
