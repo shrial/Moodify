@@ -21,7 +21,7 @@
     }
 
     .login-container {
-      background-color: rgba(90, 0, 46, 0.95); /* Dark Burgundy */
+      background-color: rgba(90, 0, 46, 0.95); 
       padding: 40px;
       border-radius: 15px;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
@@ -84,7 +84,7 @@
       font-weight: bold;
       text-decoration: none;
     }
-    /* Media Queries */
+    
     @media (max-width: 600px) {
       body {
         padding: 10px;
@@ -147,9 +147,9 @@
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
 
-  // Check if both fields are filled
+  
   if (username && password) {
-    // Send login data to backend
+    
     fetch('/login', {
       method: 'POST',
       headers: {
@@ -163,9 +163,9 @@
         // Save login state
         localStorage.setItem("loggedInUser", username);
         alert("Login successful!");
-        window.location.href = "home.html"; // Redirect to the home page
+        window.location.href = "home.html"; 
       } else {
-        alert(data.message); // Show error message from server
+        alert(data.message); 
       }
     })
     .catch(error => {
