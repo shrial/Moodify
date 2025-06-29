@@ -1,4 +1,5 @@
-**Moodify** - A song and movie recommendation website which recommends songs or movies based on user's mood.
+# Moodify
+A song and movie recommendation website which recommends songs or movies based on user's mood.
 
 This project makes use of :
 - HTML,CSS, Javascript - to design and code the website.
