@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Liked Songs - Moodify</title>
+  <style>
+    body {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      color: #E8DCCF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #navbar {
+      position: fixed;
+      height: 10vh;
+      width: 100vw;
+      background-color: rgb(161, 0, 79, 0.75);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 70px;
+    }
+
+    #moodify {
+      position: fixed;
+      left: 40px;
+      top: 23px;
+      color: #D4B078;
+      text-decoration: none;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    #navbar a {
+      top: 23px;
+      color: #D4B078;
+      text-decoration: none;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    #navbar a:hover {
+      color: #D4B078;
+    }
+
+    h1 {
+      color: #D4B078;
+      margin-top: 90px;
+      margin-bottom: 20px;
+    }
+
+    .songs-table {
+      background-color: rgba(90, 0, 46, 0.9);
+      border-radius: 15px;
+      padding: 20px;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: #E8DCCF;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #CBAE82;
+    }
+
+    th {
+      background-color: #A1004F;
+      color: #E8DCCF;
+    }
+
+    tr:hover {
+      background-color: rgba(203, 174, 130, 0.3);
+    }
+
+    .heart-img {
+      width: 24px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .heart-img:hover {
+      transform: scale(1.2);
+    }
+
+    .glow {
+      animation: glow-pulse 2s infinite ease-in-out;
+      filter: drop-shadow(0 0 6px red);
+    }
+
+    @keyframes glow-pulse {
+      0% { transform: scale(1); filter: drop-shadow(0 0 6px red); }
+      50% { transform: scale(1.3); filter: drop-shadow(0 0 12px red); }
+      100% { transform: scale(1); filter: drop-shadow(0 0 6px red); }
+    }
+
+    .footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #dca100;
+    }
+
+    @media screen and (max-width: 768px) {
+      #navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 10px 0;
+        gap: 15px;
+      }
+
+      #moodify {
+        position: static;
+        font-size: 1.4em;
+      }
+
+      #navbar a {
+        font-size: 1em;
+      }
+
+      h1 {
+        font-size: 1.4em;
+        margin-top: 120px;
+      }
+
+      .songs-table {
+        padding: 15px;
+        width: 95%;
+      }
+
+      table th, table td {
+        padding: 10px 6px;
+        font-size: 0.9em;
+      }
+
+      .heart-img {
+        width: 20px;
+      }
+
+      .footer {
+        font-size: 12px;
+        text-align: center;
+        margin: 20px 10px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      h1 {
+        font-size: 1.2em;
+        margin-top: 130px;
+      }
+
+      table th, table td {
+        font-size: 0.8em;
+        padding: 8px 4px;
+      }
+
+      .heart-img {
+        width: 18px;
+      }
+
+      .songs-table {
+        padding: 10px;
+      }
+
+      #navbar {
+        gap: 10px;
+      }
+
+      #navbar a {
+        font-size: 0.95em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="navbar">
+    <a id="moodify" href="./home.html">Moodify</a>
+    <a href="./likedsongs.html">Liked Songs</a>
+    <a href="./likedmovies.html">Liked Movies</a>
+    
+  </nav>
+  <div style="height: 40px;"></div>
+  <h1>🎵 Liked Songs</h1>
+  <div class="songs-table">
+    <table>
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Song Name</th>
+          <th>Year</th>
+          <th>Artist</th>
+          <th>❤</th>
+        </tr>
+      </thead>
+      <tbody id="likedSongsList">
+        
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Moodify | Songs that match your mood 🎵
+  </div>
+
+  <script>
+    function loadLikedSongs() {
+      const userId = localStorage.getItem("loggedInUser") || "U001";
+      const likedSongs = JSON.parse(localStorage.getItem("likedSongs")) || [];
+      const likedSongsList = document.getElementById("likedSongsList");
+      likedSongsList.innerHTML = "";
+
+      const userLikedSongs = likedSongs.filter(song => song.user_id === userId);
+
+      userLikedSongs.forEach(song => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${song.user_id}</td>
+          <td>${song.song_name}</td>
+          <td>${song.year}</td>
+          <td>${song.artist_name}</td>
+          <td>
+            <img 
+              src="redheart.jpg" 
+              class="heart-img glow" 
+              onclick="toggleUnlike('${song.song_name}')"
+            />
+          </td>
+        `;
+
+        likedSongsList.appendChild(row);
+      });
+    }
+    async function removeLikedSong(song) {
+    try {
+        const response = await fetch('/removeLikedSong', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id: song.user_id, 
+                song_name: song.song_name,
+                artist_name: song.artist_name
+            })
+        });
+
+        const data = await response.text(); 
+        if (response.ok) {
+            console.log(data); 
+            alert("Song removed from liked songs!");
+            
+            removeSongFromUI(song.song_name);  
+        } else {
+            alert("Failed to remove song: " + data);
+        }
+    } catch (error) {
+        console.error("Error removing liked song:", error);
+        alert("Error removing song.");
+    }
+}
+
+function removeSongFromUI(song_name) {
+ 
+    const songElement = document.getElementById(song_name);
+    if (songElement) {
+        songElement.remove();
+    }
+}
+
+    function toggleUnlike(songName) {
+      const userId = localStorage.getItem("loggedInUser") || "U001";
+      let likedSongs = JSON.parse(localStorage.getItem("likedSongs")) || [];
+
+      likedSongs = likedSongs.filter(
+        song => !(song.song_name === songName && song.user_id === userId)
+      );
+
+      localStorage.setItem("likedSongs", JSON.stringify(likedSongs));
+      loadLikedSongs();
+    }
+
+    function saveToDatabase() {
+      const userId = localStorage.getItem("loggedInUser") || "U001";
+      let likedSongs = JSON.parse(localStorage.getItem("likedSongs")) || [];
+
+      // Filter songs for the current user
+      const userLikedSongs = likedSongs.filter(song => song.user_id === userId);
+
+      fetch("http://localhost:3000/saveLikedSongs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userLikedSongs)
+      })
+      .then(response => {
+        if (response.ok) {
+          alert("Saved to database!");
+        } else {
+          alert("Failed to save!");
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("Error occurred");
+      });
+    }
+
+    window.onload = () => {
+      loadLikedSongs();
+      saveToDatabase(); 
+    };
+  </script>
+</body>
+</html>
